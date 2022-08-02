@@ -1,6 +1,6 @@
 import requests
-from config import tok
-from pprint import pprint
+# from config import tok
+# from pprint import pprint
 
 
 class VKinder:
@@ -60,3 +60,4 @@ class VKinder:
 
                 l.append([f'{first_name} {last_name}\n https://vk.com/id{owner_id}\n', self.get_top_photo(owner_id)])
         return l
+

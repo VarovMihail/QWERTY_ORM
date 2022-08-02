@@ -2,7 +2,7 @@ import vk_api
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api import VkUpload
 from vk_api.longpoll import VkLongPoll, VkEventType
-from config import ACCESS_TOKEN, tok
+from config import bot_token, person_token, database_name, database_username, database_password
 from vkinder_class import VKinder
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker
@@ -17,7 +17,7 @@ def next_person(items):  # следующий человек(меняется т
         user_name = first_name + ' ' + last_name
     except StopIteration:
         print('КОНЕЦ')
-        user1 = VKinder(tok, gender, city, min_age, max_age, 5)
+        user1 = VKinder(person_token, gender, city, min_age, max_age, 5)
         my_list = user1.search()
         items = iter(my_list)
         user_data = next(items)
@@ -26,14 +26,15 @@ def next_person(items):  # следующий человек(меняется т
         #return user_data, user_name, link
     return user_data, user_name, link
 
+
 if __name__ == '__main__':
-    DSN = "postgresql://postgres:ENot3112@localhost:5432/test_kursovaia"
+    DSN = f"postgresql://{database_username}:{database_password}@localhost:5432/{database_name}"
     engine = sqlalchemy.create_engine(DSN,echo=True)
     create_tables(engine)
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    session_vk = vk_api.VkApi(token=ACCESS_TOKEN)  # Подключаем токен и longpoll
+    session_vk = vk_api.VkApi(token=bot_token)  # Подключаем токен и longpoll
     photos = VkUpload(session_vk)  # переменная для загрузки фото
     vk = session_vk.get_api()
     longpoll = VkLongPoll(session_vk)  # сообщаем что хотим исп именно подключение через VkLongPoll
@@ -54,7 +55,7 @@ if __name__ == '__main__':
                 replay_without_keyboard(id, 'Сейчас поищу')
 
                 gender, city, min_age, max_age = [i.strip() for i in message.split('/')]
-                user1 = VKinder(tok, gender, city, min_age, max_age, 10)
+                user1 = VKinder(person_token, gender, city, min_age, max_age, 10)
                 my_list = user1.search()
                 if not my_list:
                     replay_without_keyboard(id, 'Неверный запрос, попробуйте еще раз')

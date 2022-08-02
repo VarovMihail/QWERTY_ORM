@@ -1,3 +1,9 @@
-ACCESS_TOKEN = 'токен группы'
+bot_token = ''
 
-tok = 'личный токен'
+person_token = ''
+
+database_name = ''
+
+database_username = ''
+
+database_password = ''
